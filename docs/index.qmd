@@ -1,26 +1,675 @@
 ---
-title: "Clase reproducibilidad y replicabilidad"
-format: html
-editor: visual
+title: "Clase reproducibilidad y replicabilidad."
+subtitle: "Informes"
+author:
+  - name: "Amaru Simón Agüero Jiménez"
+    email: "aaguero@miaundes.cl"
+    orcid: "0000-0001-7336-1833"
+date: "`r Sys.Date()`"
+lang: es
+format:
+  html:
+    title-block-banner: "#ffffff"
+    smooth-scroll: true
+    toc: true
+    toc-depth: 6
+    toc-location: right
+    number-sections: true
+    number-depth: 6
+    code-fold: true
+    bibliography: ref.bib
+    csl: apa-numeric-superscript.csl
+    theme: cosmo
+    fig-cap-location: bottom
+#    css: styles.css
+execute:
+  warning: false
+  message: false
+  fig-width: 8
+  fig-height: 6
 ---
 
-## Quarto
+<img src="logo.png" style="width: 250px; position:absolute; top:0; left:0; padding:10px;"/>
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+# Paquetes R
 
 ```{r}
-1 + 1
+install_and_load <- function(package) {
+  if (!require(package, character.only = TRUE)) {
+    utils::install.packages(package)
+    library(package, character.only = TRUE)
+  }
+}
+
+# List of packages to be installed and loaded
+packages <- c("knitr","kableExtra", "DT", "table1", "reticulate","gapminder","latex2exp","tidyverse", "plotly", "maps", "sf", "tmap")
+
+# Apply the function to each package
+invisible(capture.output(sapply(packages, install_and_load)))
+
+```
+A continuación, se explica la funcionalidad de cada paquete contenido en la lista.
+
+## Paquetes para Tablas y Visualización de Datos
+
+- **`kableExtra`**: Extiende la funcionalidad de `knitr::kable()`, permitiendo crear tablas avanzadas y personalizadas para documentos HTML, PDF y LaTeX.
+
+- **`DT`**: Proporciona una interfaz para crear tablas interactivas en R Markdown, con opciones de búsqueda, clasificación y exportación.
+
+- **`table1`**: Genera tablas de resumen descriptivo para reportar estadísticas de manera clara y profesional en investigaciones científicas.
+
+## Paquetes para Análisis y Manejo de Datos
+
+- **`reticulate`**: Permite la integración entre R y Python, facilitando la ejecución de scripts y funciones de Python dentro de un entorno R.
+
+- **`gapminder`**: Contiene un conjunto de datos históricos de desarrollo humano, ideal para ejercicios de análisis y visualización de datos.
+
+- **`tidyverse`**: Un conjunto de paquetes esenciales para la manipulación, limpieza y visualización de datos en R, incluyendo `dplyr`, `ggplot2`, `tidyr`, `readr`, entre otros.
+
+## Paquetes para Visualización Gráfica y Mapas
+
+- **`plotly`**: Facilita la creación de gráficos interactivos, especialmente para la web, compatibles con `ggplot2`.
+
+- **`maps`**: Proporciona mapas base para crear visualizaciones geográficas simples en R.
+
+- **`sf`**: Maneja datos espaciales, permitiendo operaciones GIS como transformación, consulta y análisis espacial.
+
+- **`tmap`**: Crea mapas temáticos de alta calidad y visualizaciones interactivas basadas en datos espaciales.
+
+## Paquete para Expresiones Matemáticas
+
+- **`latex2exp`**: Permite incluir expresiones matemáticas en gráficos de R utilizando sintaxis de LaTeX.
+
+
+# Introdución a Quarto
+
+Quarto es una herramienta de publicación y creación de documentos científicos, informes y presentaciones interactivas. Combina la escritura en formato Markdown con lenguajes de programación como R, Python y Julia para crear documentos reproducibles y dinámicos. Es similar a R Markdown, pero más flexible y adaptable para proyectos multilingües. Una ayuda memoria se encuentra [acá](https://rstudio.github.io/cheatsheets/quarto.pdf).
+
+Quarto y HTML están estrechamente relacionados, ya que Quarto puede generar documentos HTML interactivos y personalizables a partir de archivos `.qmd` escritos en Markdown y combinados con lenguajes de programación como R, Python, Julia y JavaScript.
+
+Por último Quarto le permite entrelazar contenido y código ejecutable en un documento terminado. Para obtener más información sobre Quarto, consulte [esto](https://quarto.org).
+
+## Visualización en HTML
+
+Un archivo CSS (Cascading Style Sheets o Hojas de Estilo en Cascada) es un componente esencial en el desarrollo web que define la presentación y el diseño visual de una página o sitio web. Mientras que HTML estructura el contenido, CSS se encarga de su apariencia, controlando aspectos como colores, tipografías, márgenes y disposición de los elementos.
+
+Aparte Quarto ofrece una variedad de temas predefinidos para personalizar la apariencia de tus documentos HTML. Por defecto, utiliza Bootstrap 5, pero puedes seleccionar entre 25 temas adicionales del proyecto Bootswatch. Algunos de los temas [disponibles](https://quarto.org/docs/output-formats/html-themes.html#theme-options).
+
+Estos temas se pueden ajustar o desde un archivo .css o .scss o desde un chunk css, ejemplo:
+
+```{css}
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+h1 {
+  color: #333333;
+}
+
+p {
+  text-align: justify;
+}
+
 ```
 
-You can add options to executable code like this
+## YAML
 
-```{r echo=FALSE}
-#| echo: false
+YAML (YAML Ain't Markup Language) es un formato de configuración utilizado en Quarto y R Markdown para definir metadatos y opciones del documento. El bloque YAML aparece al comienzo del archivo y permite configurar el título, autor, fecha, formato de salida y muchas otras opciones.
+
+## Opciones en el Chunk
+
+Un chunk es un bloque de código que se incluye dentro de un documento de Quarto (.qmd) o R Markdown (.Rmd). Estos bloques permiten escribir y ejecutar código en lenguajes como R, Python, Julia o JavaScript. Los resultados del código, como texto, gráficos y tablas, se incluyen automáticamente en el documento renderizado.
+
+Puede agregar opciones al YAML o al código chunk como este
+
+```{r }
+#| message: false
+
 2 * 2
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+-   **`eval`**: Determina si el código del *chunk* se evalúa.\
+    **Valores:** `true` (por defecto) o `false`.\
+    Si se establece en `false`, el código no se ejecuta, pero puede mostrarse si `echo` es `true`.
+
+-   **`echo`**: Controla la visualización del código fuente en el documento final.\
+    **Valores:** `true` (por defecto), `false` o `"fenced"`.\
+    Con `echo: fenced`, el código se muestra con delimitadores de bloque, útil para tutoriales.
+
+-   **`include`**: Decide si se incluye alguna salida del *chunk* en el documento.\
+    **Valores:** `true` (por defecto) o `false`.\
+    Si es `false`, ni el código ni los resultados se muestran, aunque el código se ejecute.
+
+-   **`warning`**: Indica si las advertencias generadas durante la ejecución se muestran.\
+    **Valores:** `true` (por defecto) o `false`.
+
+-   **`error`**: Especifica si los errores durante la ejecución se incluyen en la salida.\
+    **Valores:** `true` o `false` (por defecto).\
+    Si es `true`, los errores no detienen el procesamiento del documento.
+
+-   **`message`**: Controla la visualización de mensajes generados durante la ejecución.\
+    **Valores:** `true` (por defecto) o `false`.
+
+-   **`fig-width` y `fig-height`**: Definen el ancho y alto de las figuras generadas, en pulgadas.\
+    **Por defecto:** 7x5 para documentos HTML.
+
+-   **`fig-cap`**: Establece el título o leyenda de la figura generada.
+
+-   **`fig-alt`**: Proporciona texto alternativo para figuras, mejorando la accesibilidad.
+
+-   **`output`**: Controla la inclusión de resultados de la ejecución.\
+    **Valores:** `true` (por defecto), `false` o `asis` (para incluir salida en bruto sin envolturas adicionales).
+
+# Texto en Rmarkdown
+
+## Encabezados
+Los encabezados se crean usando el símbolo `#`. Cuantos más `#` uses, menor será el nivel del encabezado.
+
+### Encabezado de nivel 3
+#### Encabezado de nivel 4
+##### Encabezado de nivel 5
+###### Encabezado de nivel 6
+
+## Énfasis de Texto
+
+**Negrita**   → **Texto en negrita**  
+*Itálica*     → *Texto en itálica*  
+***Negrita e Itálica*** → ***Texto en negrita e itálica***
+
+## Listas
+### Listas No Ordenadas
+- Elemento 1
+- Elemento 2
+  - Sub-elemento 2.1
+  - Sub-elemento 2.2
+
+## Listas Ordenadas
+1. Primer elemento
+2. Segundo elemento
+   1. Sub-elemento 2.1
+   2. Sub-elemento 2.2
+
+## Tablas
+| Columna 1 | Columna 2 | Columna 3 |
+|-----------|------------|------------|
+| Valor 1   | Valor 2    | Valor 3    |
+| Valor A   | Valor B    | Valor C    |
+
+## Citas
+### Citas en bloque 
+
+> Esta es una cita en bloque.
+> Puede abarcar varias líneas.
+
+### Citas en Bibtex
+En R Markdown, puedes citar referencias usando BibTeX en combinación con un archivo de bibliografía (.bib). para otros formatos de la referencia hay que descargar un archivo (.csl) del siguiente [link](https://github.com/citation-style-language/styles).
+
+Ejemplo:
+
+#### Direct standardization rates (DSR).
+
+For the purpose of calculating the hospitalization rate for each C51-C58 ICD code, the direct standardization by age group (stratum) method was employed [@chiang1984life] [@https://doi.org/10.1002/sim.4780100317]. The total population of Chilean females by year (2010-2023) is obtained from World Bank Open Data. [@worldbank_population_data]. This method utilizes a standard population from the 2017 Chilean Census as a reference [@censo2017]. The formula used to calculate DSR is as follows:
+
+```{=tex}
+\begin{align*}
+
+DSR=\frac{\sum^k_{i=1}N_i\frac{y_i}{n_i}}{\sum^k_{i=1}N_i}
+
+\end{align*}
+```
+where
+
+$N_i$ is the reference population size for the *i*th stratum.
+
+$y_i$ is the number of events observed in population in the *i*th stratum.
+
+$n_i$ is the person-time for the *i*th stratum of the study population.
+
+## Nota al pie
+
+Este es un ejemplo de texto con una nota al pie [^1].
+
+[^1]: Aquí se incluye la nota al pie.
+
+## Texto en linea
+
+El resultado de $\sqrt{4}$ es `r `sqrt(16)`.
+
+```{r}
+# Definimos una función de ejemplo
+mi_funcion <- function(x, y) {
+  suma <- x + y
+  return(suma)
+}
+
+# Ejecutamos la función
+mi_funcion(3, 5)
+```
+
+La suma de 3 y 5 es `r mi_funcion(3, 5)`.
+
+## Subíndice y Superíndice
+
+Texto con subíndice H~2~O y superíndice E^2^.
+
+## LaTeX
+En R Markdown, puedes usar LaTeX para incluir ecuaciones matemáticas y símbolos especiales, lo que te permite agregar fórmulas complejas en documentos científicos, informes y presentaciones.
+
+### Símbolos Matemáticos y Operadores
+
+- Fracción: $\frac{a}{b}$
+- Suma: $\sum_{i=1}^{n} i$
+- Producto: $\prod_{i=1}^{n} i$
+- Raíz Cuadrada: $\sqrt{x+1}$
+- Potencia: $x^2$ o $x^{n+1}$
+- Subíndice: $x_1, y_2$
+
+### Matrices y Sistemas de Ecuaciones
+
+$$
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+$$
+
+### Funciones Matematicas
+
+- Logaritmo: $\log(x)$
+- Seno y Coseno: $\sin(\theta), \cos(\theta)$
+- Límite: $\lim_{x \to \infty} f(x)$
+- Derivada: $\frac{d}{dx} f(x)$
+- Integral: $\int_0^\infty e^{-x} dx$
+
+### Funciones Alineadas
+
+$$
+\begin{aligned}
+\int_{-\infty}^\infty f(x) \, dx 
+&= (2\pi)^{-1/2} \int_{-\infty}^\infty \exp\left(-\frac{1}{2}x^2\right) dx \\
+&= (2\pi)^{-1/2} 2 \int_{0}^\infty \exp\left(-\frac{1}{2}x^2\right) dx 
+\quad \text{(since the integrand is even)} \\
+&= (2\pi)^{-1/2} \left( \int_{0}^\infty \exp\left(-\frac{1}{2}x^2\right) dx 
+\int_{0}^\infty \exp\left(-\frac{1}{2}y^2\right) dy \right)^{1/2} \\
+&= (2\pi)^{-1/2} \left( \int_{0}^\infty \int_{0}^\infty \exp\left(-\frac{1}{2}(x^2 + y^2)\right) dx \, dy \right)^{1/2} \\
+&= (2\pi)^{-1/2} \left( \int_{0}^\infty \int_{0}^{2\pi} \exp\left(-\frac{1}{2}r^2\right) r \, d\theta \, dr \right)^{1/2} \\
+&= (2\pi)^{-1/2} \left( 2\pi \int_{0}^\infty \exp\left(-\frac{1}{2}r^2\right) r \, dr \right)^{1/2} \\
+&= (2\pi)^{-1/2} \left( \int_{0}^\infty \exp\left(-\frac{1}{2}r^2\right) r \, dr \right)^{1/2} \\
+&= (2\pi)^{-1/2} \left( \int_{0}^\infty \frac{1}{1+s^2} \exp\left(-\frac{1}{2}(1+s^2)\right) \, ds \right)^{1/2} \\
+&= (2\pi)^{-1/2} \left( \int_{0}^\infty \frac{1}{1+s^2} \, ds \right)^{1/2} \\
+&= (2\pi)^{-1/2} \left( 2 \arctan(s) \Big|_0^\infty \right)^{1/2} \\
+&= (2\pi)^{-1/2} \left( 2 \cdot \frac{\pi}{2} \right)^{1/2} \\
+&= 2^{-1/2} \pi^{-1/2} \cdot \sqrt{2\pi} \\
+&= 1.
+\end{aligned}
+$$
+
+# Imagenes
+
+
+
+## Imagenes desde la web
+![Logo de Quarto](https://rstudio.github.io/cheatsheets/html/images/quarto-illustration.png){#fig-logo}
+
+## Imagenes desde R
+
+### Plot
+```{r}
+#| label: fig-plot
+#| fig-cap: "Gráfico de líneas en plot"
+
+# Filtrar los datos para Chile y Argentina
+datos_filtrados <- gapminder %>%
+  filter(country %in% c("Chile", "Argentina"))
+
+# Definir el rango de años y la esperanza de vida para el eje Y
+years <- unique(datos_filtrados$year)
+ylim <- range(datos_filtrados$lifeExp)
+
+# Crear el gráfico vacío
+plot(NULL, xlim = range(years), ylim = ylim,
+     xlab = "Año", ylab = "Esperanza de Vida (años)",
+     main = "Evolución de la Esperanza de Vida en Chile y Argentina")
+
+# Añadir líneas para cada país
+countries <- c("Chile", "Argentina")
+colors <- c("blue", "red")
+
+for (i in 1:2) {
+  country_data <- datos_filtrados %>% filter(country == countries[i])
+  lines(country_data$year, country_data$lifeExp, type = "o", col = colors[i], pch = 16)
+}
+
+# Añadir una leyenda
+legend("bottomright", legend = countries, col = colors, pch = 16, lty = 1)
+```
+
+### Ggplot
+```{r}
+#| label: fig-ggplot
+#| fig-cap: "Gráfico de líneas en ggplot"
+
+# Crear el gráfico de líneas
+ggplot(datos_filtrados, aes(x = year, y = lifeExp, color = country)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Evolución de la Esperanza de Vida en Chile y Argentina",
+    x = "Año",
+    y = "Esperanza de Vida (años)",
+    color = "País"
+  ) +
+  theme_minimal()
+```
+### Ggplot y LaTeX
+
+```{r}
+#| label: fig-ggplot-tex
+#| fig-cap: "Distribución Normal"
+
+#Distribucion Normal
+x <- seq(from = -5, to = 5, by = 0.01)
+norm_dat <- data.frame(x, pdf = dnorm(x,0,1))
+quant <- c(-Inf, -1.96, 1.96, Inf)
+norm_dat$quant <- factor(findInterval(norm_dat$x,quant))
+
+#grafico de funcion de densidad de probabilidades de la normal
+ggplot(norm_dat, aes(x,pdf)) + geom_line()+  geom_ribbon(aes(ymin=0, ymax=pdf, fill=quant), alpha=0.5)+
+  scale_x_continuous(breaks=seq(from = -5, to = 5, by = 1), expand = c(0, 0))+
+  scale_y_continuous(limits = c(0,0.45), expand = c(0, 0))+
+  geom_vline(xintercept=(1.96), size=1, color="red")+
+  geom_vline(xintercept=(-1.96), size=1, color="red")+
+  scale_fill_manual(values = c("red","grey","red"))+
+  theme_bw() + theme(legend.position = "none")+
+  ylab(latex2exp::TeX("$ = \\frac{1}{\\sigma\\sqrt{2\\pi}}\\exp\\left(-\\frac{1}{2}\\left(\\frac{x-\\mu}{\\sigma}\\right)^{\\2}\\,\\right)$"))+
+  xlab(latex2exp::TeX("$\\z_0$" ))+
+  annotate(geom = "text",
+           label = "1,96",
+           x = 1.96,
+           y = 0.3,
+           angle = 90, 
+           vjust = -1,
+           colour = "red",
+           size = 8)+
+  annotate(geom = "text",
+           label = "-1,96",
+           x = -1.96,
+           y = 0.3,
+           angle = 90, 
+           vjust = -1,
+           colour = "red",
+           size = 8)
+```
+### Plotly
+
+```{r}
+#| label: fig-ploty
+#| fig-cap: "PIB per cápita vs esperanza de vida"
+# Crear un gráfico interactivo de PIB per cápita vs esperanza de vida
+p <- plot_ly(
+  data = gapminder, 
+  x = ~gdpPercap,  # PIB per cápita
+  y = ~lifeExp,    # Esperanza de vida
+  color = ~continent,  # Color por continente
+  size = ~pop,  # Tamaño del punto según población
+  text = ~paste("País:", country,
+                "<br>Año:", year,
+                "<br>PIB per cápita:", round(gdpPercap, 2),
+                "<br>Esperanza de vida:", round(lifeExp, 1),
+                "<br>Población:", format(pop, big.mark = ",")),  # Tooltips
+  type = 'scatter', 
+  mode = 'markers',
+  sizes = c(10, 50)
+)
+
+# Configurar el diseño del gráfico
+p <- p %>% layout(
+  title = "Relación entre PIB per cápita y Esperanza de Vida (Gapminder)",
+  xaxis = list(title = "PIB per cápita (log)", type = "log"),  # Escala logarítmica
+  yaxis = list(title = "Esperanza de Vida (años)"),
+  showlegend = TRUE
+)
+
+# Mostrar el gráfico interactivo
+p
+```
+
+### Mapas con maps
+
+```{r}
+#| label: fig-maps
+#| fig-cap: "Chile"
+# Cargar el mapa de un país o región (ejemplo: Chile)
+map_data <- map_data("world", region = "Chile")
+
+# Crear el gráfico del mapa
+ggplot(data = map_data) +
+  geom_polygon(aes(x = long, y = lat, group = group), fill = "lightblue", color = "black") +
+  coord_fixed(1.3) +  # Mantiene las proporciones
+  labs(title = "Mapa de Chile") +
+  theme_minimal()
+```
+### Mapas con sf
+
+```{r}
+#| label: fig-sf
+#| fig-cap: "Carolina del Norte (Estados Unidos)."
+# Cargar datos de ejemplo del paquete sf
+world <- st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+
+# Graficar el mapa
+ggplot(data = world) +
+  geom_sf(fill = "lightblue", color = "black") +
+  labs(title = "Mapa de Ejemplo (Datos de sf)") +
+  theme_minimal()
+```
+### Mapas con tmaps
+
+```{r}
+#| label: fig-tmap
+#| fig-cap: "Mapa Mundial."
+# Crear un mapa con datos de ejemplo
+data("World", package = "tmap")
+
+# Activar el modo interactivo
+tmap_mode("view")
+# Visualización interactiva
+tm_shape(World) +
+  tm_polygons("HPI", title = "Índice de Planeta Feliz (HPI)") +
+  tm_layout(title = "Mapa Mundial Interactivo")
+```
+### Ploty y maps
+
+```{r}
+#| label: fig-plotly-maps
+#| fig-cap: "Mapa Mundial PIB."
+
+# Filtrar datos para un año específico (ejemplo: 2007)
+data_gap <- gapminder %>% filter(year == 2007)
+
+# Crear el gráfico interactivo del mapa
+map_plot <- plot_ly(
+  data = data_gap,
+  type = 'choropleth',  # Tipo de gráfico para mapas
+  locations = ~country,  # Nombre de los países
+  locationmode = 'country names',  # Modo de ubicación
+  z = ~gdpPercap,  # Variable que representa los colores (PIB per cápita)
+  text = ~paste("País:", country,
+                "<br>Esperanza de Vida:", round(lifeExp, 1),
+                "<br>PIB per cápita:", round(gdpPercap, 2),
+                "<br>Población:", format(pop, big.mark = ",")),  # Información emergente
+  colorscale = 'Viridis',  # Escala de colores
+  colorbar = list(title = "PIB per cápita"),  # Título de la barra de colores
+  marker = list(line = list(color = "gray", width = 0.5))
+)
+
+# Configuración adicional del mapa
+map_plot <- map_plot %>%
+  layout(
+    title = "Mapa Mundial: PIB per cápita (2007)",
+    geo = list(
+      projection = list(type = 'natural earth'),  # Proyección del mapa
+      showframe = FALSE,
+      showcoastlines = TRUE,
+      coastlinecolor = "gray",
+      landcolor = "lightgray",
+      oceancolor = "lightblue"
+    )
+  )
+
+# Mostrar el mapa
+map_plot
+```
+### Citar figuras en el texto
+ La @fig-plot, @fig-ggplot, la @fig-sf son...
+ 
+
+
+## Imagenes desde Python
+
+```{bash}
+# pip install seaborn matplotlib scikit-learn pandas plotly
+```
+
+```{python}
+#| label: fig-python
+#| fig-cap: "Grafico Python 1"
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Crear datos
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
+
+# Generar la figura
+plt.figure(figsize=(8, 6))
+plt.plot(x, y, label="Seno(x)", color="blue")
+plt.title("Gráfico generado con Python en Quarto")
+plt.xlabel("Eje X")
+plt.ylabel("Eje Y")
+plt.legend()
+plt.grid(True)
+
+# Mostrar la figura
+plt.show()
+```
+
+```{python}
+#| label: fig-python2
+#| fig-cap: "Grafico Python 2"
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+import pandas as pd
+
+# Cargar el dataset de ejemplo
+data = load_iris()
+df = pd.DataFrame(data.data, columns=data.feature_names)
+df['species'] = data.target
+
+# Crear un gráfico con seaborn
+sns.set(style="whitegrid")
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=df, x='species', y='sepal length (cm)', palette='viridis')
+
+# Configurar el título
+plt.title("Distribución de la longitud del sépalo por especie", fontsize=14)
+plt.xlabel("Especie", fontsize=12)
+plt.ylabel("Longitud del Sépalo (cm)", fontsize=12)
+
+# Mostrar la figura
+plt.show()
+```
+
+```{python}
+#| label: fig-python3
+#| fig-cap: "Grafico Python 3"
+
+# Importar bibliotecas necesarias
+import plotly.express as px
+import pandas as pd
+
+# Cargar datos de gapminder
+df = px.data.gapminder()
+
+# Crear gráfico interactivo
+fig = px.scatter(
+    df[df['year'] == 2007],  # Filtrar año
+    x="gdpPercap", 
+    y="lifeExp", 
+    size="pop", 
+    color="continent", 
+    hover_name="country", 
+    log_x=True, 
+    title="Relación entre PIB per cápita y Esperanza de Vida (2007)",
+    labels={"gdpPercap": "PIB per cápita", "lifeExp": "Esperanza de Vida"},
+)
+
+# Mostrar el gráfico interactivo
+fig.show()
+```
+
+# Tablas
+
+## Table1
+```{r}
+#| label: tbl-tabla1
+#| tbl-cap: "Tabla de table"
+
+# Filtrar datos de Gapminder para 2007
+data_gap <- gapminder %>% filter(year == 2007)
+
+# Etiquetas descriptivas
+label(data_gap$lifeExp) <- "Esperanza de Vida (años)"
+label(data_gap$gdpPercap) <- "PIB per cápita (USD)"
+label(data_gap$continent) <- "Continente"
+label(data_gap$pop) <- "Población Total"
+
+# Crear tabla descriptiva
+table1(~ lifeExp + gdpPercap + pop | continent, data = data_gap)
+```
+[Opciones table1](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html).
+
+## Kable
+
+```{r}
+#| label: tbl-tabla2
+#| tbl-cap: "Tabla de kable"
+
+# Crear un resumen de datos por continente
+tabla_gap <- data_gap %>%
+  group_by(continent) %>%
+  summarise(
+    `Esperanza de Vida Promedio` = round(mean(lifeExp), 1),
+    `PIB per cápita Promedio (USD)` = round(mean(gdpPercap), 2),
+    `Población Total` = format(sum(pop), big.mark = ",")
+  )
+
+# Crear tabla bien formateada
+tabla_gap %>%
+  kbl(caption = "Resumen de Indicadores Sociodemográficos por Continente (2007)") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+[Opciones kableExtra](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html).
+
+## DT
+```{r}
+#| label: tbl-tabla3
+#| tbl-cap: "Tabla de DT"
+
+# Crear tabla interactiva con variables seleccionadas
+datatable(
+  data_gap %>% select(country, continent, lifeExp, gdpPercap, pop),
+  options = list(
+    pageLength = 10,
+    autoWidth = TRUE,
+    searchHighlight = TRUE
+  )
+)
+```
+[Opciones DT](https://rstudio.github.io/DT/).
+
+
+
