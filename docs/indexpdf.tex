@@ -297,7 +297,7 @@
 \makeatother
 \subtitle{Informes en .pdf}
 \author{Amaru Simón Agüero Jiménez}
-\date{2024-12-09}
+\date{2024-12-10}
 
 \begin{document}
 \maketitle
@@ -971,11 +971,34 @@ Ecuaciones}\label{matrices-y-sistemas-de-ecuaciones}
 
 \end{figure}%
 
+\subsection{Imagenes desde Python}\label{imagenes-desde-python}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# pip install seaborn matplotlib scikit{-}learn pandas plotly}
+\CommentTok{\# Crea el entorno virtual}
+\NormalTok{reticulate}\SpecialCharTok{::}\FunctionTok{virtualenv\_create}\NormalTok{(}\StringTok{"mi\_entorno\_python"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+virtualenv: mi_entorno_python
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Activa el entorno virtual}
+\NormalTok{reticulate}\SpecialCharTok{::}\FunctionTok{use\_virtualenv}\NormalTok{(}\StringTok{"mi\_entorno\_python"}\NormalTok{, }\AttributeTok{required =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Instala paquetes de Python en el entorno virtual}
+\NormalTok{reticulate}\SpecialCharTok{::}\FunctionTok{virtualenv\_install}\NormalTok{(}\StringTok{"mi\_entorno\_python"}\NormalTok{, }
+                   \AttributeTok{packages =} \FunctionTok{c}\NormalTok{(}\StringTok{"seaborn"}\NormalTok{, }\StringTok{"matplotlib"}\NormalTok{, }
+                                \StringTok{"scikit{-}learn"}\NormalTok{, }\StringTok{"pandas"}\NormalTok{, }\StringTok{"plotly"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Using virtual environment "mi_entorno_python" ...
+\end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
