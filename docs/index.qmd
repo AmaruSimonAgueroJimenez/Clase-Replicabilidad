@@ -110,7 +110,6 @@ h1 {
 p {
   text-align: justify;
 }
-
 ```
 
 ## YAML
@@ -306,8 +305,6 @@ $$
 $$
 
 # Imagenes
-
-
 
 ## Imagenes desde la web
 ![Logo de Quarto](https://rstudio.github.io/cheatsheets/html/images/quarto-illustration.png){#fig-logo}
@@ -526,15 +523,15 @@ map_plot
 ## Imagenes desde Python
 ```{r}
 # Crea el entorno virtual
-reticulate::virtualenv_create("mi_entorno_python")
+invisible(reticulate::virtualenv_create("mi_entorno_python"))
 
 # Activa el entorno virtual
-reticulate::use_virtualenv("mi_entorno_python", required = TRUE)
+invisible(reticulate::use_virtualenv("mi_entorno_python", required = TRUE))
 
 # Instala paquetes de Python en el entorno virtual
-reticulate::virtualenv_install("mi_entorno_python", 
+invisible(reticulate::virtualenv_install("mi_entorno_python", 
                    packages = c("seaborn", "matplotlib", 
-                                "scikit-learn", "pandas", "plotly"))
+                                "scikit-learn", "pandas", "plotly")))
 ```
 
 ```{python}

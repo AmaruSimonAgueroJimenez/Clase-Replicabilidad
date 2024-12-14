@@ -343,10 +343,9 @@ $$
 &= 1.
 \end{aligned}
 $$
+\newpage
 
 # Imagenes
-
-
 
 ## Imagenes desde la web
 ![Logo de Quarto](https://rstudio.github.io/cheatsheets/html/images/quarto-illustration.png){#fig-logo}
@@ -554,7 +553,10 @@ plt.show()
 
 ### Citar figuras en el texto
  La @fig-plot, @fig-ggplot, la @fig-sf son...
- 
+
+
+\newpage
+
 # Tablas
 
 ## Table1
